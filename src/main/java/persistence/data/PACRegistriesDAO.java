@@ -80,6 +80,13 @@ public class PACRegistriesDAO implements IPACRegistries {
     }
 
     @Override
+    public PACRegistry findRegistryByDate(String path, String fileName, String date){
+        List<PACRegistry> registries = readAllRegistries(path, fileName);
+        return registries.stream().filter(registry -> Objects.equals(registry.getDate(), date))
+                .findFirst().orElse(null);
+    }
+
+    @Override
     public boolean updateRegistry(String path, String fileName, PACRegistry toAdd, PACRegistry toRemove) {
         boolean response = false;
         DataUtil data = new DataUtil();
@@ -135,11 +142,4 @@ public class PACRegistriesDAO implements IPACRegistries {
         }
         return response;
     }
-
-    protected PACRegistry findRegistryByDate(List<PACRegistry> registries, String date) {
-        return registries.stream().filter(registry -> Objects.equals(registry.getDate(), date))
-                .findFirst().orElse(null);
-    }
-
-
 }

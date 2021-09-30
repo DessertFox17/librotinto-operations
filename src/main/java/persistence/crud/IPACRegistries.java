@@ -9,6 +9,7 @@ public interface IPACRegistries {
     boolean deleteFile(String path, String fileName);
     boolean newRegistry(String path, String fileName, PACRegistry payload);
     List<PACRegistry> readAllRegistries(String path, String fileName);
+    PACRegistry findRegistryByDate(String path, String fileName, String date);
     boolean updateRegistry(String path, String fileName, PACRegistry toAdd, PACRegistry toRemove);
     boolean deleteRegistry(String path, String fileName, PACRegistry toRemove);
 }
