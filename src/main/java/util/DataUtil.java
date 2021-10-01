@@ -2,6 +2,7 @@ package util;
 
 import com.google.gson.Gson;
 import domain.serviceimp.PACServiceImp;
+import persistence.model.MBRegistry;
 import persistence.model.PACRegistry;
 
 import java.io.IOException;
@@ -13,18 +14,35 @@ import java.util.List;
 import java.util.Properties;
 
 public class DataUtil{
-    public String fromPACtoString(PACRegistry pacRegistry) {
-        return getGsonInstance().toJson(pacRegistry);
+    public String fromPACtoString(PACRegistry payload) {
+        return getGsonInstance().toJson(payload);
+    }
+
+    public String fromMBtoString(MBRegistry payload) {
+        return getGsonInstance().toJson(payload);
     }
 
     public PACRegistry fromStringToPAC(String json) {
         return getGsonInstance().fromJson(json, PACRegistry.class);
     }
 
+    public MBRegistry fromStringToMB(String json) {
+        return getGsonInstance().fromJson(json, MBRegistry.class);
+    }
+
     public List<String> fromPACsToStrings(List<PACRegistry> payload){
         List<String> pacList = new ArrayList<>();
         payload.forEach(registry -> {
             String value = fromPACtoString(registry);
+            pacList.add(value);
+        });
+        return pacList;
+    }
+
+    public List<String> fromMBsToStrings(List<MBRegistry> payload){
+        List<String> pacList = new ArrayList<>();
+        payload.forEach(registry -> {
+            String value = fromMBtoString(registry);
             pacList.add(value);
         });
         return pacList;

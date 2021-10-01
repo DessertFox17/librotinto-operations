@@ -1,7 +1,7 @@
 package persistence.data;
 
-import persistence.crud.IPACPersistence;
-import persistence.model.PACRegistry;
+import persistence.crud.IMBPersistence;
+import persistence.model.MBRegistry;
 import util.DataUtil;
 
 import java.io.BufferedReader;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PACPersistenceDAO implements IPACPersistence {
+public class MBPersistenceDAO implements IMBPersistence {
     private File file;
     private PrintWriter writer;
 
@@ -44,11 +44,11 @@ public class PACPersistenceDAO implements IPACPersistence {
     }
 
     @Override
-    public boolean newRegistry(String path, String fileName, PACRegistry payload) {
+    public boolean newRegistry(String path, String fileName, MBRegistry payload) {
         boolean response = false;
         file = new File(path + fileName);
         DataUtil data = new DataUtil();
-        String content = data.fromPACtoString(payload);
+        String content = data.fromMBtoString(payload);
         try {
             writer = new PrintWriter(new FileWriter(file, true));
             writer.println(content);
@@ -61,14 +61,14 @@ public class PACPersistenceDAO implements IPACPersistence {
     }
 
     @Override
-    public List<PACRegistry> readAllRegistries(String path, String fileName) {
-        List<PACRegistry> registries = new ArrayList<>();
+    public List<MBRegistry> readAllRegistries(String path, String fileName) {
+        List<MBRegistry> registries = new ArrayList<>();
         DataUtil data = new DataUtil();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path + fileName));
             String read = reader.readLine();
             while (read != null) {
-                PACRegistry pac = data.fromStringToPAC(read);
+                MBRegistry pac = data.fromStringToMB(read);
                 registries.add(pac);
                 read = reader.readLine();
             }
@@ -79,21 +79,21 @@ public class PACPersistenceDAO implements IPACPersistence {
     }
 
     @Override
-    public PACRegistry findRegistryByDate(String path, String fileName, String date){
-        List<PACRegistry> registries = readAllRegistries(path, fileName);
+    public MBRegistry findRegistryByDate(String path, String fileName, String date){
+        List<MBRegistry> registries = readAllRegistries(path, fileName);
         return registries.stream().filter(registry -> Objects.equals(registry.getDate(), date))
                 .findFirst().orElse(null);
     }
 
     @Override
-    public boolean updateRegistry(String path, String fileName, PACRegistry payload) {
+    public boolean updateRegistry(String path, String fileName, MBRegistry payload) {
         boolean response = false;
         DataUtil data = new DataUtil();
         file = new File(path + fileName);
-        List<PACRegistry> registries = readAllRegistries(path, fileName);
+        List<MBRegistry> registries = readAllRegistries(path, fileName);
         registries.remove(findRegistryByDate(path,fileName,payload.getDate()));
         registries.add(payload);
-        List<String> content = data.fromPACsToStrings(registries);
+        List<String> content = data.fromMBsToStrings(registries);
         try {
             writer = new PrintWriter(new FileWriter(file));
             writer.println();
@@ -115,13 +115,13 @@ public class PACPersistenceDAO implements IPACPersistence {
     }
 
     @Override
-    public boolean deleteRegistry(String path, String fileName, PACRegistry toRemove) {
+    public boolean deleteRegistry(String path, String fileName, MBRegistry toRemove) {
         boolean response = false;
         DataUtil data = new DataUtil();
         file = new File(path + fileName);
-        List<PACRegistry> registries = readAllRegistries(path, fileName);
+        List<MBRegistry> registries = readAllRegistries(path, fileName);
         registries.remove(toRemove);
-        List<String> content = data.fromPACsToStrings(registries);
+        List<String> content = data.fromMBsToStrings(registries);
         try {
             writer = new PrintWriter(new FileWriter(file));
             writer.println();
