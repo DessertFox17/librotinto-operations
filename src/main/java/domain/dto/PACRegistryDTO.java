@@ -1,13 +1,16 @@
-package persistence.model;
+package domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.List;
+import persistence.model.PACDebtors;
 import static util.DataUtil.getDateString;
+import java.util.List;
 
+@AllArgsConstructor
 @Getter
 @Setter
-public class PACRegistry {
+public class PACRegistryDTO {
     private String date;
     private Long pacBalance;
     private Long countedBalance;
@@ -17,7 +20,7 @@ public class PACRegistry {
     private List<PACDebtors> debtors;
     private Long difference;
 
-    public PACRegistry() {
+    public PACRegistryDTO() {
         this.date = getDateString();
     }
 

@@ -1,5 +1,6 @@
-public class Operations {
-    public static void main(String[] args) {
 
+public class Operations {
+
+    public static void main(String[] args) {
     }
 }

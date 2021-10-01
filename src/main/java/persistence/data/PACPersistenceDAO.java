@@ -1,6 +1,6 @@
 package persistence.data;
 
-import persistence.crud.IPACRegistries;
+import persistence.crud.IPACPersistence;
 import persistence.model.PACRegistry;
 import util.DataUtil;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PACRegistriesDAO implements IPACRegistries {
+public class PACPersistenceDAO implements IPACPersistence {
     private File file;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -87,13 +87,13 @@ public class PACRegistriesDAO implements IPACRegistries {
     }
 
     @Override
-    public boolean updateRegistry(String path, String fileName, PACRegistry toAdd, PACRegistry toRemove) {
+    public boolean updateRegistry(String path, String fileName, PACRegistry payload) {
         boolean response = false;
         DataUtil data = new DataUtil();
         file = new File(path + fileName);
         List<PACRegistry> registries = readAllRegistries(path, fileName);
-        registries.remove(toRemove);
-        registries.add(toAdd);
+        registries.remove(findRegistryByDate(path,fileName,payload.getDate()));
+        registries.add(payload);
         List<String> content = data.fromPACsToStrings(registries);
         try {
             writer = new PrintWriter(new FileWriter(file));
